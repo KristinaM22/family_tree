@@ -254,7 +254,97 @@ class FamilyTreeService
 		return $one;
 	}
 
+	/*-------------------- CRUD operacije nad vezama OFFSPRING --------------------*/	
+	function getChildren($id) {		// direktni potomci osobe $id
+		$client = DB::getConnection();
+
+		$results = $client->run(
+			'MATCH (:Person {personID: "' . $id . '"})-[:OFFSPRING]->(p:Person)' .
+			'RETURN p'
+		);
+		
+		$all = [];
+		foreach($results as $result) {
+			$node = $result->get('p');
+			$all[] = [
+				'personID' => $node->getProperty('personID'),
+				'firstName' => $node->getProperty('firstName'),
+				'lastName' => $node->getProperty('lastName'),
+				'gender' => $node->getProperty('gender'),
+				'birthDate' => $node->getProperty('birthDate')
+			];
+		}
+
+		return $all;
+	}
 	
+	function getParents($id) {		// direktni pretci osobe $id
+		$client = DB::getConnection();
+
+		$results = $client->run(
+			'MATCH (:Person {personID: "' . $id . '"})<-[:OFFSPRING]-(p:Person)' .
+			'RETURN p'
+		);
+		
+		$all = [];
+		foreach($results as $result) {
+			$node = $result->get('p');
+			$all[] = [
+				'personID' => $node->getProperty('personID'),
+				'firstName' => $node->getProperty('firstName'),
+				'lastName' => $node->getProperty('lastName'),
+				'gender' => $node->getProperty('gender'),
+				'birthDate' => $node->getProperty('birthDate')
+			];
+		}
+
+		return $all;
+	}
+
+	function modifyOffspringRelationship($id1, $id2) {
+		$client = DB::getConnection();
+
+		$results = $client->run(
+			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
+			'SET p.adopted = ' . $adopted .	
+			'RETURN p'
+		);
+		
+		if($results->count() === 0) exit("Ne postoji obiteljska veza između " . $id1 . " i " . $id2);
+		if($results->count() > 1) echo("Našao više od jedne veze");
+
+		$node = $results->get('p');
+		$one = ['married' => $node->getProperty('married')];
+
+		return $one;
+	}
+
+	function deleteOffspringRelationship($id1, $id2) {
+		$client = DB::getConnection();
+
+		$results = $client->run(
+			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
+			'DELETE p'
+		);
+	}
+
+	function createOffspringRelationship($id1, $id2, $adopted) {	// kreiraj :offspring za ($idRoditelja, $idDjeteta) s atributom $adopted
+		$client = DB::getConnection();
+
+		$results = $client->run(
+			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
+			'CREATE (p1)-[rel:OFFSPRING {adopted: ' . $adopted . '}]->(p2)' .
+			'RETURN rel'
+		);
+		
+		if($results->count() === 0) exit("Nije stvorena obiteljska veza između " . $id1 . " i " . $id2);
+		if($results->count() > 1) echo("Našao više od jedne veze");
+
+		$node = $results->get('rel');
+		$one = ['adopted' => $node->getProperty('adopted')];
+
+		return $one;
+	}
 };
 
 ?>
