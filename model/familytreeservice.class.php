@@ -338,6 +338,22 @@ class FamilyTreeService
 
 		return $one;
 	}
+
+	function findOffspringRelationships($id1, $id2) {
+
+		$results = $this->client->run(
+			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
+			'RETURN p'
+		);
+		
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
+
+		$node = $results[0]->get('p');
+		$one = ['adopted' => $node->getProperty('adopted')];
+
+		return $one;
+	}
 };
 
 ?>
