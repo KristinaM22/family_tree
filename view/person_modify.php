@@ -14,7 +14,7 @@
     if(!empty($parents)){
     foreach($parents as $parent){
         $set = 'no';
-        if($parent['atribut'] === 'true') $set = 'yes';
+        if($parent['atribut']['adopted'] === 'true') $set = 'yes';
         echo '<tr><td>Parent</td><td>Adopted: ' . $set . '</td> ';
         echo '<td><input type="checkbox" id="change_' . $parent['person']->personID . '" name="change_parents[]" value="' . $parent['person']->personID;
         if($set === 'yes') echo '_no';
@@ -27,9 +27,9 @@
     if(!empty($partners)){
     foreach($partners as $partner){
         $set = 'no';
-        if($partner['atribut'] === 'true') $set = 'yes';
+        if($partner['atribut']['married'] === 'true') $set = 'yes';
         echo '<tr><td>Partner</td><td>Married: ' . $set . '</td>';
-        echo '<td><input type="checkbox" id="change_' . $partner['person']->personID . '" name="change_patners[]" value="' . $partner['person']->personID;
+        echo '<td><input type="checkbox" id="change_' . $partner['person']->personID . '" name="change_partners[]" value="' . $partner['person']->personID;
         if($set === 'yes') echo '_no';
         else echo '_yes';
         echo '"></td>';
@@ -40,7 +40,7 @@
     if(!empty($children)){
     foreach($children as $child){
         $set = 'no';
-        if($child['atribut'] === 'true') $set = 'yes';
+        if($child['atribut']['adopted'] === 'true') $set = 'yes';
         echo '<tr><td>Child</td><td>Adopted: ' . $set . '</td>';
         echo '<td><input type="checkbox" id="change_' . $child['person']->personID . '" name="change_children[]" value="' . $child['person']->personID;
         if($set === 'yes') echo '_no';

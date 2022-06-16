@@ -60,7 +60,7 @@ class PersonController extends BaseController
 			$parents[$index]['person'] = $fts->getPersonByID($parent->personID);
 			if(is_string($parents[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Parent: ' . $parents[$index]['atribut'] . ', id=' . $id . ' & parent id=' . $parent->personID;
+				$this->registry->template->msg = 'Parent: ' . $parents[$index]['person'] . ', id=' . $id . ' & parent id=' . $parent->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -87,7 +87,7 @@ class PersonController extends BaseController
 			$partners[$index]['person'] = $fts->getPersonByID($partner->personID);
 			if(is_string($partners[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Partner: ' . $partners[$index]['atribut'] . ', id=' . $id . ' & id partner id=' . $partner->personID;
+				$this->registry->template->msg = 'Partner: ' . $partners[$index]['person'] . ', id=' . $id . ' & id partner id=' . $partner->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -114,7 +114,7 @@ class PersonController extends BaseController
 			$children[$index]['person'] = $fts->getPersonByID($child->personID);
 			if(is_string($children[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Child: ' . $children[$index]['atribut'] . ', id=' . $id . ' & child id=' . $child->personID;
+				$this->registry->template->msg = 'Child: ' . $children[$index]['person'] . ', id=' . $id . ' & child id=' . $child->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -186,7 +186,7 @@ class PersonController extends BaseController
 			$parents[$index]['person'] = $fts->getPersonByID($parent->personID);
 			if(is_string($parents[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Parent: ' . $parents[$index]['atribut'] . ', id=' . $id . ' & parent id=' . $parent->personID;
+				$this->registry->template->msg = 'Parent: ' . $parents[$index]['person'] . ', id=' . $id . ' & parent id=' . $parent->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -213,7 +213,7 @@ class PersonController extends BaseController
 			$partners[$index]['person'] = $fts->getPersonByID($partner->personID);
 			if(is_string($partners[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Partner: ' . $partners[$index]['atribut'] . ', id=' . $id . ' & id partner id=' . $partner->personID;
+				$this->registry->template->msg = 'Partner: ' . $partners[$index]['person'] . ', id=' . $id . ' & id partner id=' . $partner->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -240,7 +240,7 @@ class PersonController extends BaseController
 			$children[$index]['person'] = $fts->getPersonByID($child->personID);
 			if(is_string($children[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
-				$this->registry->template->msg = 'Child: ' . $children[$index]['atribut'] . ', id=' . $id . ' & child id=' . $child->personID;
+				$this->registry->template->msg = 'Child: ' . $children[$index]['person'] . ', id=' . $id . ' & child id=' . $child->personID;
 				$this->registry->template->show( 'message' );
 				return;
 			}
@@ -265,6 +265,7 @@ class PersonController extends BaseController
 
 	public function newRelationship($_id){
 		$id = $_id;
+		$this->registry->template->title = 'Family trees';
 		$this->registry->template->person_id = $id;
 		$this->registry->template->show( 'person_newRelationship' );
 	}
@@ -273,7 +274,7 @@ class PersonController extends BaseController
 		
 		$fts = new FamilyTreeService();
 		$id = $_POST['save'];
-		$msg = '';
+		$msg = '<br>';
 
 		$person = $fts->modifyPerson($id, $_POST['firstName'], $_POST['lastName'], $_POST['birthDate'], $_POST['gender']);
 		if(is_string($person)){
@@ -284,52 +285,81 @@ class PersonController extends BaseController
 			$msg = $msg . 'firstName: ' . $person->firstName . ', lastName: ' . $person->lastName . ', birthDate: ' . $person->birthDate . ', gender: ' . $person->gender . '<br>';
 		}
 
+		if(isset($_POST['change_parents'])){
 		foreach($_POST['change_parents'] as $checkbox) {
 			$value = explode('_', $checkbox);
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
-		}
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['adopted'] . '<br>';
+		}}
 
+		if(isset($_POST['delete_parents'])){
 		foreach($_POST['delete_parents'] as $checkbox) {
 			$value = explode('_', $checkbox);
-			$result = $fts->deleteOffspringRelationship($id, $value[1]);
-			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
-		}
+			$result = $fts->deleteOffspringRelationship($id, $value[0]);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' delete: ' . $result . '<br>';
+		}}
 
+		if(isset($_POST['change_partners'])){
 		foreach($_POST['change_partners'] as $checkbox) {
 			$value = explode('_', $checkbox);
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyPartnerRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
-		}
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['married'] . '<br>';
+		}}
 
+		if(isset($_POST['delete_partners'])){
 		foreach($_POST['delete_partners'] as $checkbox) {
 			$value = explode('_', $checkbox);
-			$result = $fts->deletePartnerRelationship($id, $value[1]);
-			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
-		}
+			$result = $fts->deletePartnerRelationship($id, $value[0]);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' delete: ' . $result . '<br>';
+		}}
 
+		if(isset($_POST['change_children'])){
 		foreach($_POST['change_children'] as $checkbox) {
 			$value = explode('_', $checkbox);
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
-		}
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['adopted'] . '<br>';
+		}}
 
+		if(isset($_POST['delete_children'])){
 		foreach($_POST['delete_children'] as $checkbox) {
 			$value = explode('_', $checkbox);
-			$result = $fts->deleteOffspringRelationship($id, $value[1]);
-			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
-		}
+			$result = $fts->deleteOffspringRelationship($id, $value[0]);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' delete: ' . $result . '<br>';
+		}}
 
+		$this->registry->template->title = 'Family trees';
 		$this->registry->template->msg = $msg;
-
 		$this->registry->template->show( 'message' );
 	}
+
+	public function addNewRelationship(){
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'message' );
+	}
+
+	public function createNew(){
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'person_createNew' );
+	}
+
+	public function addNewPerson(){
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'message' );
+	}
+
+	public function findAncestor(){}
+
+	public function ancestorResponse(){}
+
+	public function search(){}
+
+	public function searchResult(){}
 }; 
 
 ?>

@@ -13,21 +13,21 @@
     if(!empty($parents)){
     foreach($parents as $parent){
         echo '<tr><td>Parent</td>';
-        if($parent['atribut'] === 'true') echo '<td>Adopted</td>';
+        if($parent['atribut']['adopted'] === 'true') echo '<td>Adopted</td>';
         else echo '<td>/</td>';
         echo '<td>' . $parent['person']->firstName . ' ' . $parent['person']->lastName . '</td></tr>';
     }}
     if(!empty($partners)){
     foreach($partners as $partner){
         echo '<tr><td>Partner</td>';
-        if($partner['atribut'] === 'true') echo '<td>Married</td>';
+        if($partner['atribut']['married'] === 'true') echo '<td>Married</td>';
         else echo '<td>/</td>';
         echo '<td>' . $partner['person']->firstName . ' ' . $partner['person']->lastName . '</td></tr>';
     }}
     if(!empty($children)){
     foreach($children as $child){
         echo '<tr><td>Child</td>';
-        if($child['atribut'] === 'true') echo '<td>Adopted</td>';
+        if($child['atribut']['adopted'] === 'true') echo '<td>Adopted</td>';
         else echo '<td>/</td>';
         echo '<td>' . $child['person']->firstName . ' ' . $child['person']->lastName . '</td></tr>';
     }}
