@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Naslov</title>
+<?php require_once __SITE_PATH . '/view/_header.php'; ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="./hello.css">
-</head>
-<body>
 <form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/createNew'?>">
     <table>
         <tr><td>First name: </td><td><input type="text" name="firstName" value="" /></td></tr>
@@ -20,5 +11,4 @@
     <button type="submit" name="save">Save</button>
 </form>
 
-</body>
-</html>
+<?php require_once __SITE_PATH . '/view/_footer.php'; ?>
