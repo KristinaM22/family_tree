@@ -1,5 +1,7 @@
 <?php
 
+require __SITE_PATH . '/vendor/' . 'autoload.php';
+
 use Laudis\Neo4j\Authentication\Authenticate;
 use Laudis\Neo4j\ClientBuilder;
 

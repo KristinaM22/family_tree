@@ -1,10 +1,5 @@
 {
     "require": {
-        "laudis/neo4j-php-client": "^2.6",
-        "ext-json": "*",
-        "ext-bcmath": "*",
-        "nyholm/psr7": "^1.5",
-        "nyholm/psr7-server": "^1.0",
-        "kriswallsmith/buzz": "^1.2"
+        "laudis/neo4j-php-client": "^2.6"
     }
 }

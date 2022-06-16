@@ -84,7 +84,7 @@ class Router
 		}
 
 		if( empty( $this->controller ) )
-			$this->controller = 'teamup';
+			$this->controller = 'person';
 
 		if( empty( $this->action ) )
 			$this->action = 'index';
