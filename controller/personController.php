@@ -138,27 +138,18 @@ class PersonController extends BaseController
 	}
 
 	public function handle_request(){
-		$id = $_GET['id'];
-		$val = $_GET['btn'];
-		if($val === 'delete'){
-			$fts = new FamilyTreeService();
-
-		$this->registry->template->msg = $fts->deletePerson($id);
-
-		$this->registry->template->show( 'message' );
-		return;
+		if(isset($_POST['deletePerson'])){
+			$this->deletePerson($_POST['deletePerson']);
 		}
-		else if($val === 'modify'){
-			$this->modifyPerson($id);
+		else if(isset($_POST['modifyPerson'])){
+			$this->modifyPerson($_POST['modifyPerson']);
 		}
-		else if($val === 'newrel'){
-			$this->newRelationship($id);
+		else if(isset($_POST['newRelationship'])){
+			$this->newRelationship($_POST['newRelationship']);
 		}
 	}
 
-	public function deletePerson(){
-
-		$id = $_GET['person_id'];
+	public function deletePerson($_id){;
 
 		$fts = new FamilyTreeService();
 
@@ -167,9 +158,9 @@ class PersonController extends BaseController
 		$this->registry->template->show( 'message' );
 	}
 
-	public function modifyPerson(){
+	public function modifyPerson($_id){
 
-		$id = $_GET['person_id'];
+		$id = $_id;
 
 		$fts = new FamilyTreeService();
 
@@ -276,69 +267,6 @@ class PersonController extends BaseController
 		$this->registry->template->person_id = $_GET['person_id'];;
 		$this->registry->template->show( 'person_newRelationship' );
 	}
-
-	/*public function user() 
-	{
-		$tus = new TeamUpService();
-
-		$id = $_SESSION['id_user'];
-
-		$this->registry->template->title = 'TeamUp!';
-		$this->registry->template->projectList = $tus->getProjectsByUser( $id );
-		$this->registry->template->user = $tus->getUserById( $id );
-        $this->registry->template->show( 'projects_user' );
-	}
-
-	public function new() 
-	{
-		$this->registry->template->title = 'TeamUp!';
-        $this->registry->template->show( 'projects_new' );
-	}
-
-	public function createNew() 
-	{
-		$tus = new TeamUpService();
-
-		$id = $_SESSION['id_user'];
-
-		if( !isset( $_POST['title'] ) || !isset( $_POST['abstract'] ) || !isset( $_POST['number'] ) )
-		{
-			header( 'Location: ' . __SITE_URL . '/index.php?rt=projects/new');
-			exit();
-		}
-
-		$title = $tus->createNewProject( $id, $_POST['title'], $_POST['abstract'], $_POST['number'] );
-
-		$this->registry->template->title = 'TeamUp!';
-		$this->registry->template->msg = 'New project ' . $title . ' created.';
-		$this->registry->template->show( 'projects_confirmNewProject' );
-	}
-
-	public function show()
-	{
-		$tus = new TeamUpService();
-
-		$project = $tus->getProjectById( $_GET['id_project'] );
-		$id = $_SESSION['id_user'];
-
-		$view = 'projects_show';
-		$projects = $tus->getProjectsByUser( $id );
-		$arr = array();
-		foreach( $projects as $p )
-			$arr[$p->id] = $p;
-		
-		if( $project->status === 'open' && !isset( $arr[$project->id] ) )
-			$view = $view . 'Apply';
-		else if( $project->status === 'open' && $id === $project->author_id ){
-			$this->registry->template->applicationList = $tus->getApplicationsbyProject( $_GET['id_project'] );
-			$view = $view . 'Applications';
-		}
-
-		$this->registry->template->title = 'TeamUp!';
-		$this->registry->template->project = $project;
-		$this->registry->template->id_user = $_SESSION['id_user'];
-		$this->registry->template->show( $view );
-	}*/
 }; 
 
 ?>

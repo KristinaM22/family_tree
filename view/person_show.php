@@ -34,10 +34,10 @@
     echo '</table><br>';
 ?>
 
-<form method="get" action="<?php echo __SITE_URL . '/familytree.php?rt=person/handle_request'?>">
-    <button type="submit" name="btn" value="delete">Delete</button>
-    <button type="submit" name="btn" value="modify">Modify person and relationships</button>
-    <button type="submit" name="btn" value="newrel">Add new relationship</button>
+<form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/handle_request' ?>">
+    <button type="submit" name="deletePerson" value="<?php echo $person->personID ?>">Delete</button>
+    <button type="submit" name="modifyPerson" value="<?php echo $person->personID ?>">Modify person and relationships</button>
+    <button type="submit" name="newRelationship" value="<?php echo $person->personID ?>">Add new relationship</button>
 </form>
 
 <?php require_once __SITE_PATH . '/view/_footer.php'; ?>
