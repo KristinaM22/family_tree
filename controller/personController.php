@@ -263,9 +263,72 @@ class PersonController extends BaseController
 		$this->registry->template->show( 'person_modify' );
 	}
 
-	public function newRelationship(){
-		$this->registry->template->person_id = $_GET['person_id'];;
+	public function newRelationship($_id){
+		$id = $_id;
+		$this->registry->template->person_id = $id;
 		$this->registry->template->show( 'person_newRelationship' );
+	}
+
+	public function setModifiedValues(){
+		
+		$fts = new FamilyTreeService();
+		$id = $_POST['save'];
+		$msg = '';
+
+		$person = $fts->modifyPerson($id, $_POST['firstName'], $_POST['lastName'], $_POST['birthDate'], $_POST['gender']);
+		if(is_string($person)){
+			$msg = $msg . $person . ', id=' . $id . '<br>';
+		}
+		else{
+			$msg = $msg . 'Person change successful.<br>';
+			$msg = $msg . 'firstName: ' . $person->firstName . ', lastName: ' . $person->lastName . ', birthDate: ' . $person->birthDate . ', gender: ' . $person->gender . '<br>';
+		}
+
+		foreach($_POST['change_parents'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$set = 'false';
+			if($value[1] === 'yes') $set = 'true';
+			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
+		}
+
+		foreach($_POST['delete_parents'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$result = $fts->deleteOffspringRelationship($id, $value[1]);
+			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
+		}
+
+		foreach($_POST['change_partners'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$set = 'false';
+			if($value[1] === 'yes') $set = 'true';
+			$result = $fts->modifyPartnerRelationship($id, $value[0], $set);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
+		}
+
+		foreach($_POST['delete_partners'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$result = $fts->deletePartnerRelationship($id, $value[1]);
+			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
+		}
+
+		foreach($_POST['change_children'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$set = 'false';
+			if($value[1] === 'yes') $set = 'true';
+			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result . '<br>';
+		}
+
+		foreach($_POST['delete_children'] as $checkbox) {
+			$value = explode('_', $checkbox);
+			$result = $fts->deleteOffspringRelationship($id, $value[1]);
+			$msg = $msg . 'Relationship with id=' . $value[1] . ' delete: ' . $result . '<br>';
+		}
+
+		$this->registry->template->msg = $msg;
+
+		$this->registry->template->show( 'message' );
 	}
 }; 
 

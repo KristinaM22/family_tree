@@ -124,7 +124,7 @@ class FamilyTreeService
 	function modifyPerson($personID, $firstName, $lastName, $birthDate, $gender) {
 
 		$results = $this->client->run(
-			'MATCH (p:Person {personID: "' . $id . '"})' . 
+			'MATCH (p:Person {personID: "' . $personID . '"})' . 
 			'SET firstName = "' . $firstName . '",' .
 				'lastName = "' . $lastName . '",' .
 				'birthDate = "' . $birthDate . '",' .
@@ -297,7 +297,7 @@ class FamilyTreeService
 		return $all;
 	}
 
-	function modifyOffspringRelationship($id1, $id2) {
+	function modifyOffspringRelationship($id1, $id2, $adopted) {
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
