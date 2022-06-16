@@ -27,8 +27,8 @@
     if(!empty($children)){
     foreach($children as $child){
         echo '<tr><td>Child</td>';
-        if($child['atribut'] === 'false') echo '<td>/</td>';
-        else echo '<td>Adopted</td>';
+        if($child['atribut'] === 'true') echo '<td>Adopted</td>';
+        else echo '<td>/</td>';
         echo '<td>' . $child['person']->firstName . ' ' . $child['person']->lastName . '</td></tr>';
     }}
     echo '</table>';

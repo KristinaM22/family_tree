@@ -213,7 +213,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:PARTNER]-(:Person {personID: "' . $id2 . '"})' .
-			'SET p.married = ' . $married .	
+			'SET p.married = "' . $married . '" ' .
 			'RETURN p'
 		);
 		
@@ -239,7 +239,7 @@ class FamilyTreeService
 
 		$results = $client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
-			'CREATE (p1)-[rel:PARTNER {married: ' . $married . '}]->(p2)' .
+			'CREATE (p1)-[rel:PARTNER {married: "' . $married . '"}]->(p2)' .
 			'RETURN rel'
 		);
 		
@@ -301,7 +301,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
-			'SET p.adopted = ' . $adopted .	
+			'SET p.adopted = "' . $adopted . '" ' .
 			'RETURN p'
 		);
 		
@@ -326,7 +326,7 @@ class FamilyTreeService
 
 		$results = $client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
-			'CREATE (p1)-[rel:OFFSPRING {adopted: ' . $adopted . '}]->(p2)' .
+			'CREATE (p1)-[rel:OFFSPRING {adopted: "' . $adopted . '"}]->(p2)' .
 			'RETURN rel'
 		);
 		
