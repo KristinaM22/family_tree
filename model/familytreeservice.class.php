@@ -193,7 +193,7 @@ class FamilyTreeService
 		return $all;
 	}
 
-	function findPartnerRelationships($id1, $id2) {
+	function findPartnerRelationship($id1, $id2) {
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:PARTNER]-(:Person {personID: "' . $id2 . '"})' .

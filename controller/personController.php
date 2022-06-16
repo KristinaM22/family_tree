@@ -91,7 +91,7 @@ class PersonController extends BaseController
 				$this->registry->template->show( 'message' );
 				return;
 			}
-			$partners[$index]['atribut'] = $fts->findOffspringRelationship($partner->personID, $id);
+			$partners[$index]['atribut'] = $fts->findPartnerRelationship($partner->personID, $id);
 			if(is_string($partners[$index]['atribut'])){
 				$this->registry->template->title = 'Family trees';
 				$this->registry->template->msg = 'Partner reltionship: ' . $partners[$index]['atribut'] . ', id=' . $id . ' & partner id=' . $partner->personID;
@@ -226,7 +226,7 @@ class PersonController extends BaseController
 				$this->registry->template->show( 'message' );
 				return;
 			}
-			$partners[$index]['atribut'] = $fts->findOffspringRelationship($partner->personID, $id);
+			$partners[$index]['atribut'] = $fts->findPartnerRelationship($partner->personID, $id);
 			if(is_string($partners[$index]['atribut'])){
 				$this->registry->template->title = 'Family trees';
 				$this->registry->template->msg = 'Partner reltionship: ' . $partners[$index]['atribut'] . ', id=' . $id . ' & partner id=' . $partner->personID;
