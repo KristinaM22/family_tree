@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Naslov</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+
+    <!--<link rel="stylesheet" type="text/css" href="./hello.css">-->
+</head>
+<body>
+
+
+<form>
+    <button type="submit" id="persons_list">Show</button><br>
+    <button type="submit" id="person_search">Search</button><br>
+    <button type="submit" id="person_create">Create</button><br>
+    <button type="submit" id="check6th">Check</button><br>
+</form>
+
+<script type="text/javascript">
+    $("#persons_list").on("click", function() {
+        location.href = "./persons_list.php";
+    });
+
+    $("#person_search").on("click", function() {
+        location.href = "./person_search.php";
+    });
+
+    $("#check6th").on("click", function() {
+        location.href = "./person_checkSixthCousin.php";
+    });
+
+    $("#person_create").on("click", function() {
+        location.href = "./person_create.php";
+    });
+</script>
+
+</body>
+</html>
