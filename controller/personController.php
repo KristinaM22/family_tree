@@ -58,7 +58,7 @@ class PersonController extends BaseController
 		$index = 0;
 		foreach($result as $parent){
 			$parents[$index]['person'] = $fts->getPersonByID($parent->personID);
-			if(is_string($parents[$index]['atribut'])){
+			if(is_string($parents[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
 				$this->registry->template->msg = 'Parent: ' . $parents[$index]['atribut'] . ', parent id=' . $parent->personID;
 				$this->registry->template->show( 'message' );
@@ -85,7 +85,7 @@ class PersonController extends BaseController
 		$index = 0;
 		foreach($result as $partner){
 			$partners[$index]['person'] = $fts->getPersonByID($partner->personID);
-			if(is_string($partners[$index]['atribut'])){
+			if(is_string($partners[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
 				$this->registry->template->msg = 'Partner: ' . $partners[$index]['atribut'] . ', partner id=' . $partner->personID;
 				$this->registry->template->show( 'message' );
@@ -112,7 +112,7 @@ class PersonController extends BaseController
 		$index = 0;
 		foreach($result as $child){
 			$children[$index]['person'] = $fts->getPersonByID($child->personID);
-			if(is_string($children[$index]['atribut'])){
+			if(is_string($children[$index]['person'])){
 				$this->registry->template->title = 'Family trees';
 				$this->registry->template->msg = 'Child: ' . $children[$index]['atribut'] . ', child id=' . $child->personID;
 				$this->registry->template->show( 'message' );
