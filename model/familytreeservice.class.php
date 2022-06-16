@@ -10,7 +10,9 @@ class FamilyTreeService
 	private $client = null;
 	public function __construct() {
 		$this->client = ClientBuilder::create()
-				->withDriver('aura', 'neo4j+s://0df6d930.databases.neo4j.io', Authenticate::basic('neo4j', 'lv5PdN16PMP3JdPnaRMImoYN7E-VgJrQAZyIL3NqnJs'))
+				->withDriver('aura', 
+							 'neo4j+s://0df6d930.databases.neo4j.io', 
+							 Authenticate::basic('neo4j', 'lv5PdN16PMP3JdPnaRMImoYN7E-VgJrQAZyIL3NqnJs'))
 				->withDefaultDriver('aura')
 				->build();
 	}
@@ -26,13 +28,13 @@ class FamilyTreeService
 		$all = [];
 		foreach($results as $result) {
 			$node = $result->get('p');
-			$all[] = [
-				'personID' => $node->getProperty('personID'),
-				'firstName' => $node->getProperty('firstName'),
-				'lastName' => $node->getProperty('lastName'),
-				'gender' => $node->getProperty('gender'),
-				'birthDate' => $node->getProperty('birthDate')
-			];
+			$all[] = new Person(
+				$node->getProperty('personID'),
+				$node->getProperty('firstName'),
+				$node->getProperty('lastName'),
+				$node->getProperty('gender'),
+				$node->getProperty('birthDate')
+			);
 		}
 
 		return $all;
@@ -45,19 +47,17 @@ class FamilyTreeService
 			'RETURN p'
 		);
 		
-		if($results->count() === 0) exit("Ne postoji osoba s personID=" . $id);
-		if($results->count() > 1) echo("Našao više od jednog čvora s personID=" . $id);
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = [
-			'personID' => $node->getProperty('personID'),
-			'firstName' => $node->getProperty('firstName'),
-			'lastName' => $node->getProperty('lastName'),
-			'gender' => $node->getProperty('gender'),
-			'birthDate' => $node->getProperty('birthDate')
-		];
-
-		return $one;
+		return new Person(
+			$node->getProperty('personID'),
+			$node->getProperty('firstName'),
+			$node->getProperty('lastName'),
+			$node->getProperty('gender'),
+			$node->getProperty('birthDate')
+		);
 	}
 
 	function getPersonByName($name, $surname) {
@@ -72,13 +72,13 @@ class FamilyTreeService
 		$all = [];
 		foreach($results as $result) {
 			$node = $result->get('p');
-			$all[] = [
-				'personID' => $node->getProperty('personID'),
-				'firstName' => $node->getProperty('firstName'),
-				'lastName' => $node->getProperty('lastName'),
-				'gender' => $node->getProperty('gender'),
-				'birthDate' => $node->getProperty('birthDate')
-			];
+			$all[] = new Person(
+				$node->getProperty('personID'),
+				$node->getProperty('firstName'),
+				$node->getProperty('lastName'),
+				$node->getProperty('gender'),
+				$node->getProperty('birthDate')
+			);
 		}
 
 		return $all;
@@ -98,19 +98,17 @@ class FamilyTreeService
 			'RETURN p'
 		);
 
-		if($results->count() === 0) exit("Ne postoji osoba s personID=" . $id);
-		if($results->count() > 1) echo("Našao više od jednog čvora s personID=" . $id);
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = [
-			'personID' => $node->getProperty('personID'),
-			'firstName' => $node->getProperty('firstName'),
-			'lastName' => $node->getProperty('lastName'),
-			'gender' => $node->getProperty('gender'),
-			'birthDate' => $node->getProperty('birthDate')
-		];
-
-		return $one;
+		return new Person(
+			$node->getProperty('personID'),
+			$node->getProperty('firstName'),
+			$node->getProperty('lastName'),
+			$node->getProperty('gender'),
+			$node->getProperty('birthDate')
+		);
 	}
 
 	function deletePerson($id) {
@@ -134,19 +132,17 @@ class FamilyTreeService
 			'RETURN p'
 		);
 			
-		if($results->count() === 0) exit("Ne postoji osoba s personID=" . $id);
-		if($results->count() > 1) echo("Našao više od jednog čvora s personID=" . $id);
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = [
-			'personID' => $node->getProperty('personID'),
-			'firstName' => $node->getProperty('firstName'),
-			'lastName' => $node->getProperty('lastName'),
-			'gender' => $node->getProperty('gender'),
-			'birthDate' => $node->getProperty('birthDate')
-		];
-
-		return $one;
+		return new Person(
+			$node->getProperty('personID'),
+			$node->getProperty('firstName'),
+			$node->getProperty('lastName'),
+			$node->getProperty('gender'),
+			$node->getProperty('birthDate')
+		);
 	}
 
 	/*-------------------- pretraživanje šestog koljena --------------------*/
@@ -161,19 +157,17 @@ class FamilyTreeService
 			'LIMIT 1'
 		);
 
-		if($results->count() === 0) exit("Ne postoji zajednički predak");
-		if($results->count() > 1) echo("Našao više od jednog na neku foru");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('ancestor');
-		$one = [
-			'personID' => $node->getProperty('personID'),
-			'firstName' => $node->getProperty('firstName'),
-			'lastName' => $node->getProperty('lastName'),
-			'gender' => $node->getProperty('gender'),
-			'birthDate' => $node->getProperty('birthDate')
-		];
-
-		return $one;
+		return new Person(
+			$node->getProperty('personID'),
+			$node->getProperty('firstName'),
+			$node->getProperty('lastName'),
+			$node->getProperty('gender'),
+			$node->getProperty('birthDate')
+		);
 	}
 
 	/*-------------------- CRUD operacije nad vezama PARTNER --------------------*/
@@ -187,13 +181,13 @@ class FamilyTreeService
 		$all = [];
 		foreach($results as $result) {
 			$node = $result->get('p');
-			$all[] = [
-				'personID' => $node->getProperty('personID'),
-				'firstName' => $node->getProperty('firstName'),
-				'lastName' => $node->getProperty('lastName'),
-				'gender' => $node->getProperty('gender'),
-				'birthDate' => $node->getProperty('birthDate')
-			];
+			$all[] = new Person(
+				$node->getProperty('personID'),
+				$node->getProperty('firstName'),
+				$node->getProperty('lastName'),
+				$node->getProperty('gender'),
+				$node->getProperty('birthDate')
+			);
 		}
 
 		return $all;
@@ -206,8 +200,8 @@ class FamilyTreeService
 			'RETURN p'
 		);
 		
-		if($results->count() === 0) exit("Ne postoji partnerska veza između " . $id1 . " i " . $id2);
-		if($results->count() > 1) echo("Našao više od jedne veze");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
 		$one = ['married' => $node->getProperty('married')];
@@ -223,8 +217,8 @@ class FamilyTreeService
 			'RETURN p'
 		);
 		
-		if($results->count() === 0) exit("Ne postoji partnerska veza između " . $id1 . " i " . $id2);
-		if($results->count() > 1) echo("Našao više od jedne veze");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
 		$one = ['married' => $node->getProperty('married')];
@@ -249,8 +243,8 @@ class FamilyTreeService
 			'RETURN rel'
 		);
 		
-		if($results->count() === 0) exit("Nije stvorena partnerska veza između " . $id1 . " i " . $id2);
-		if($results->count() > 1) echo("Našao više od jedne veze");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
 		$one = ['married' => $node->getProperty('married')];
@@ -269,13 +263,13 @@ class FamilyTreeService
 		$all = [];
 		foreach($results as $result) {
 			$node = $result->get('p');
-			$all[] = [
-				'personID' => $node->getProperty('personID'),
-				'firstName' => $node->getProperty('firstName'),
-				'lastName' => $node->getProperty('lastName'),
-				'gender' => $node->getProperty('gender'),
-				'birthDate' => $node->getProperty('birthDate')
-			];
+			$all[] = new Person(
+				$node->getProperty('personID'),
+				$node->getProperty('firstName'),
+				$node->getProperty('lastName'),
+				$node->getProperty('gender'),
+				$node->getProperty('birthDate')
+			);
 		}
 
 		return $all;
@@ -291,13 +285,13 @@ class FamilyTreeService
 		$all = [];
 		foreach($results as $result) {
 			$node = $result->get('p');
-			$all[] = [
-				'personID' => $node->getProperty('personID'),
-				'firstName' => $node->getProperty('firstName'),
-				'lastName' => $node->getProperty('lastName'),
-				'gender' => $node->getProperty('gender'),
-				'birthDate' => $node->getProperty('birthDate')
-			];
+			$all[] = new Person(
+				$node->getProperty('personID'),
+				$node->getProperty('firstName'),
+				$node->getProperty('lastName'),
+				$node->getProperty('gender'),
+				$node->getProperty('birthDate')
+			);
 		}
 
 		return $all;
@@ -311,8 +305,8 @@ class FamilyTreeService
 			'RETURN p'
 		);
 		
-		if($results->count() === 0) exit("Ne postoji obiteljska veza između " . $id1 . " i " . $id2);
-		if($results->count() > 1) echo("Našao više od jedne veze");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
 		$one = ['married' => $node->getProperty('married')];
@@ -336,8 +330,8 @@ class FamilyTreeService
 			'RETURN rel'
 		);
 		
-		if($results->count() === 0) exit("Nije stvorena obiteljska veza između " . $id1 . " i " . $id2);
-		if($results->count() > 1) echo("Našao više od jedne veze");
+		if($results->count() === 0) return "does not exist";
+		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
 		$one = ['adopted' => $node->getProperty('adopted')];
