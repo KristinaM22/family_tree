@@ -204,7 +204,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
+		$one = ['married' => $node->getProperty('married')];
 
 		return $one;
 	}
@@ -213,7 +213,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:PARTNER]-(:Person {personID: "' . $id2 . '"})' .
-			'SET p.married = ' . $married .	
+			'SET p.married = "' . $married . '" ' .
 			'RETURN p'
 		);
 		
@@ -221,7 +221,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
+		$one = ['married' => $node->getProperty('married')];
 
 		return $one;
 	}	
@@ -239,7 +239,7 @@ class FamilyTreeService
 
 		$results = $client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
-			'CREATE (p1)-[rel:PARTNER {married: ' . $married . '}]->(p2)' .
+			'CREATE (p1)-[rel:PARTNER {married: "' . $married . '"}]->(p2)' .
 			'RETURN rel'
 		);
 		
@@ -247,7 +247,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
-		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
+		$one = ['married' => $node->getProperty('married')];
 
 		return $one;
 	}
@@ -301,7 +301,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .
-			'SET p.adopted = ' . $adopted .	
+			'SET p.adopted = "' . $adopted . '" ' .
 			'RETURN p'
 		);
 		
@@ -309,7 +309,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
+		$one = ['adopted' => $node->getProperty('adopted')];
 
 		return $one;
 	}
@@ -326,7 +326,7 @@ class FamilyTreeService
 
 		$results = $client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
-			'CREATE (p1)-[rel:OFFSPRING {adopted: ' . $adopted . '}]->(p2)' .
+			'CREATE (p1)-[rel:OFFSPRING {adopted: "' . $adopted . '"}]->(p2)' .
 			'RETURN rel'
 		);
 		
@@ -334,7 +334,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
-		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
+		$one = ['adopted' => $node->getProperty('adopted')];
 
 		return $one;
 	}
@@ -350,7 +350,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
+		$one = ['adopted' => $node->getProperty('adopted')]; 
 
 		return $one;
 	}
