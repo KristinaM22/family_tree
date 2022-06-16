@@ -297,7 +297,7 @@ class FamilyTreeService
 		return $all;
 	}
 
-	function modifyOffspringRelationship($id1, $id2) {
+	function modifyOffspringRelationship($id1, $id2, $adopted) {
 
 		$results = $this->client->run(
 			'MATCH (:Person {personID: "' . $id1 . '"})-[p:OFFSPRING]-(:Person {personID: "' . $id2 . '"})' .

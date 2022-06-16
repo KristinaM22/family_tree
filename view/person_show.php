@@ -4,7 +4,7 @@
 <?php
     echo '<tr><td>First name: </td><td>' . $person->firstName . '</td></tr>';
     echo '<tr><td>Last name: </td><td>' . $person->lastName . '</td></tr>';
-    echo '<tr><td>Birth year: </td><td>' . $person->birthDate . '</td></tr>';
+    echo '<tr><td>Birth date: </td><td>' . $person->birthDate . '</td></tr>';
     echo '<tr><td>Gender: </td><td>' . $person->gender . '</td></tr>';
     echo '</table><br>';
 
@@ -38,6 +38,6 @@
     <button type="submit" name="deletePerson" value="<?php echo $person->personID ?>">Delete</button>
     <button type="submit" name="modifyPerson" value="<?php echo $person->personID ?>">Modify person and relationships</button>
     <button type="submit" name="newRelationship" value="<?php echo $person->personID ?>">Add new relationship</button>
-</form>
+</form><br>
 
 <?php require_once __SITE_PATH . '/view/_footer.php'; ?>
