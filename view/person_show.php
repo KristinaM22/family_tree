@@ -9,35 +9,35 @@
     echo '</table><br>';
 
     echo '<table>';
-    echo '<th><td>Relationship type</td><td>Relationship value</td><td>Person</td></th>';
+    echo '<tr><th>Relationship type</th><th>Relationship value</th><th>Person</th></tr>';
     if(!empty($parents)){
     foreach($parents as $parent){
         echo '<tr><td>Parent</td>';
-        if($parent['atribut'] === 'false') echo '<td>/</td>';
-        else echo '<td>Adopted</td>';
+        if($parent['atribut'] === 'true') echo '<td>Adopted</td>';
+        else echo '<td>/</td>';
         echo '<td>' . $parent['person']->firstName . ' ' . $parent['person']->lastName . '</td></tr>';
     }}
     if(!empty($partners)){
     foreach($partners as $partner){
         echo '<tr><td>Partner</td>';
-        if($partner['atribut'] === 'false') echo '<td>/</td>';
-        else echo '<td>Married</td>';
+        if($partner['atribut'] === 'true') echo '<td>Married</td>';
+        else echo '<td>/</td>';
         echo '<td>' . $partner['person']->firstName . ' ' . $partner['person']->lastName . '</td></tr>';
     }}
     if(!empty($children)){
     foreach($children as $child){
         echo '<tr><td>Child</td>';
-        if($child['atribut'] === 'false') echo '<td>/</td>';
-        else echo '<td>Adopted</td>';
+        if($child['atribut'] === 'true') echo '<td>Adopted</td>';
+        else echo '<td>/</td>';
         echo '<td>' . $child['person']->firstName . ' ' . $child['person']->lastName . '</td></tr>';
     }}
-    echo '</table>';
+    echo '</table><br>';
 ?>
 
 <form method="get" action="<?php echo __SITE_URL . '/familytree.php?rt=person/handle_request'?>">
-    <button type="submit" name="deletePerson">Delete</button>
-    <button type="submit" name="modifyPerson">Modify person and relationships</button>
-    <button type="submit" name="newRelationship">Add new relationship</button>
+    <button type="submit" name="btn" value="delete">Delete</button>
+    <button type="submit" name="btn" value="modify">Modify person and relationships</button>
+    <button type="submit" name="btn" value="newrel">Add new relationship</button>
 </form>
 
 <?php require_once __SITE_PATH . '/view/_footer.php'; ?>
