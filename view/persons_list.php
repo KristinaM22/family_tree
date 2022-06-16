@@ -1,29 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Naslov</title>
+<?php require_once __SITE_PATH . '/view/_header.php'; ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
-
-    <!--<link rel="stylesheet" type="text/css" href="./hello.css">-->
-</head>
-<body>
-<!--pretpostavljamo: "person":personInfo, "parents":conn1, "partners":partnerConn, "children":conn2
-također pretpostavljamo da je atribut veze pod 'atribut', a osoba pod 'person'
-traži se i id osobe s kojom imamo vezu (za modify)-->
-
-<form>
+<form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/show'?>">
     <table>
-    <?php
-        $personsList = json_decode($data);      //idk kako vraća podatke
-        foreach ($personsList as $person) {     
-            echo '<tr><td>' . $person->{'firstName'} . ' ' . $person->{'lastName'} . '</td>';
-            echo '<td><button type="submit" name="selected" value="' . $person->{'personID'} . '">Show</button></td></tr>'; 
-        }
-    ?>
-    </table><br>
+        <?php
+            foreach ($personsList as $person)
+            {
+                echo '<tr><td>' . $person->firstName . ' ' . $person->lastName . '</td>';
+                echo '<td><button type="submit" name="selected" value="' . $person->personID . '">Show</button></td></tr>';
+            }
+        ?>
+    </table>
 </form>
 
-</body>
-</html>
+<?php require_once __SITE_PATH . '/view/_footer.php'; ?>

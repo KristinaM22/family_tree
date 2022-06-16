@@ -15,22 +15,129 @@ class PersonController extends BaseController
 {
 	public function index() 
 	{
-		$tus = new FamilyTreeService();
+		$fts = new FamilyTreeService();
 
-		$this->registry->template->title = 'Family tree';
-		$this->registry->template->personsList = $tus->getAllPersons();
-		$newList = array();
-		//$newList['personID'] = $tus->getPersonByID('I0404');
-		$newList['personName'] = $tus->getPersonByName('Maria', '');
-		$newList['new'] = $tus->createPerson('first', 'last', '00-00-0000', 'male');
-		$newList['newGet'] = $tus->getPersonByID($newList['new']['personID']);
-		$this->registry->template->msg = $tus->deletePerson($newList['new']['personID']);
-		$this->registry->template->newList = $newList;
+		$this->registry->template->title = 'Family trees';
 
         $this->registry->template->show( 'index' );
 	}
 
-	public function user() 
+	public function showAll()
+	{
+		$fts = new FamilyTreeService();
+
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->personsList = $fts->getAllPersons();
+
+		$this->registry->template->show( 'persons_list' );
+	}
+
+	public function show()
+	{
+		$fts = new FamilyTreeService();
+
+		$id = $_POST['selected'];
+
+		$person = $fts->getPersonByID($id);
+
+		if(is_string($person)){
+			$this->registry->template->title = 'Family trees';
+			$this->registry->template->msg = $person;
+			$this->registry->template->show( 'message' );
+			return;
+		}
+
+		$parents = array();
+		$result = $fts->getParents($id);
+		if(is_string($result)){
+			$this->registry->template->title = 'Family trees';
+			$this->registry->template->msg = 'Parents: ' . $result;
+			$this->registry->template->show( 'message' );
+			return;
+		}
+		$index = 0;
+		foreach($result as $parent){
+			$parents[$index]['person'] = getPersonByID($parent->personID);
+			if(is_string($parents[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Parent: ' . $parents[$index]['atribut'] . ', parent id=' . $parent->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$parents[$index]['atribut'] = findOffspringRelationship($parent->personID, $id);
+			if(is_string($parents[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Parent relationship: ' . $parents[$index]['atribut'] . ', parent id=' . $parent->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$index++;
+		}
+
+		$partners = array();
+		$result = $fts->findPartners($id);
+		if(is_string($result)){
+			$this->registry->template->title = 'Family trees';
+			$this->registry->template->msg = 'Partners: ' . $result;
+			$this->registry->template->show( 'message' );
+			return;
+		}
+		$index = 0;
+		foreach($result as $partner){
+			$partners[$index]['person'] = getPersonByID($partner->personID);
+			if(is_string($partners[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Partner: ' . $partners[$index]['atribut'] . ', partner id=' . $partner->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$partners[$index]['atribut'] = findOffspringRelationship($partner->personID, $id);
+			if(is_string($partners[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Partner reltionship: ' . $partners[$index]['atribut'] . ', partner id=' . $partner->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$index++;
+		}
+
+		$children = array();
+		$result = $fts->getChildren($id);
+		if(is_string($result)){
+			$this->registry->template->title = 'Family trees';
+			$this->registry->template->msg = 'Children: ' . $result;
+			$this->registry->template->show( 'message' );
+			return;
+		}
+		$index = 0;
+		foreach($result as $child){
+			$children[$index]['person'] = getPersonByID($child->personID);
+			if(is_string($children[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Child: ' . $children[$index]['atribut'] . ', child id=' . $child->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$children[$index]['atribut'] = findOffspringRelationship($child->personID, $id);
+			if(is_string($children[$index]['atribut'])){
+				$this->registry->template->title = 'Family trees';
+				$this->registry->template->msg = 'Child relationship: ' . $children[$index]['atribut'] . ', child id=' . $child->personID;
+				$this->registry->template->show( 'message' );
+				return;
+			}
+			$index++;
+		}
+
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->person = $person;
+		$this->registry->template->parents = $parents;
+		$this->registry->template->partners = $partners;
+		$this->registry->template->children = $children;
+
+		$this->registry->template->show( 'person_show' );
+	}
+
+	/*public function user() 
 	{
 		$tus = new TeamUpService();
 
@@ -91,7 +198,7 @@ class PersonController extends BaseController
 		$this->registry->template->project = $project;
 		$this->registry->template->id_user = $_SESSION['id_user'];
 		$this->registry->template->show( $view );
-	}
+	}*/
 }; 
 
 ?>
