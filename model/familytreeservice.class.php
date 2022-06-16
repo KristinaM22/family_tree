@@ -124,11 +124,11 @@ class FamilyTreeService
 	function modifyPerson($personID, $firstName, $lastName, $birthDate, $gender) {
 
 		$results = $this->client->run(
-			'MATCH (p:Person {personID: "' . $id . '"})' . 
-			'SET firstName = "' . $firstName . '",' .
-				'lastName = "' . $lastName . '",' .
-				'birthDate = "' . $birthDate . '",' .
-				'gender = "' . $gender . '" ' .
+			'MATCH (p:Person {personID: "' . $id . '"}) ' . 
+			'SET p.firstName = "' . $firstName . '", ' .
+				'p.lastName = "' . $lastName . '", ' .
+				'p.birthDate = "' . $birthDate . '", ' .
+				'p.gender = "' . $gender . '" ' .
 			'RETURN p'
 		);
 			
