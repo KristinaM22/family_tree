@@ -204,7 +204,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['married' => $node->getProperty('married')];
+		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
 
 		return $one;
 	}
@@ -221,7 +221,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['married' => $node->getProperty('married')];
+		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
 
 		return $one;
 	}	
@@ -247,7 +247,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
-		$one = ['married' => $node->getProperty('married')];
+		$one = ['married' => $node->getProperty('married') ? "true" : "false"];
 
 		return $one;
 	}
@@ -309,7 +309,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['married' => $node->getProperty('married')];
+		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
 
 		return $one;
 	}
@@ -334,7 +334,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('rel');
-		$one = ['adopted' => $node->getProperty('adopted')];
+		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
 
 		return $one;
 	}
@@ -350,7 +350,7 @@ class FamilyTreeService
 		if($results->count() > 1) return "unexpected result";
 
 		$node = $results[0]->get('p');
-		$one = ['adopted' => $node->getProperty('adopted')];
+		$one = ['adopted' => $node->getProperty('adopted') ? "true" : "false"];
 
 		return $one;
 	}
