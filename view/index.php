@@ -1,29 +1,9 @@
 <?php 
-/*foreach($personsList as $person)
-    echo $person . '\n';*/
-for($i = 0; $i < 50; $i++){
-    foreach($personsList[$i] as $atr)
-        echo $atr . ' ';
-    echo '<br>';
-}
 
-echo '--------------------------------------------------------------';
+require_once __SITE_PATH . '/view/_header.php'; 
 
-/*foreach($newList['personID'] as $atr)
-    echo $atr . ' ';*/
-echo '<br>';
-foreach($newList['new'] as $atr)
-    //echo $atr . ' ';
-    print_r($atr);
-echo '<br>';
-foreach($newList['newGet'] as $atr)
-    echo $atr . ' ';
-echo '<br>';
-echo $msg;
-echo '......................';
-foreach($newList['personName'] as $new){
-    foreach($new as $atr)
-        echo $atr . ' ';
-    echo '<br>';
-}
+echo "<h3>Welcome to the Family Trees app! </h4>";
+
+require_once __SITE_PATH . '/view/_footer.php'; 
+
 ?>
