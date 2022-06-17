@@ -405,8 +405,12 @@ class PersonController extends BaseController
 		}
 		else{
 			$result = $fts->findSharedAncestor($_POST['radioOptions1'], $_POST['radioOptions2']);
-			if(is_string($result)) $msg = 'Common ancestor response: ' . $result;
-			else $msg = "Common ancestor found: first name: " . $result->firstName . ', last name: ' . $result->lastName . ', birth date: ' . $result->birthDate . ', gender: ' . $result->gender;
+			if(is_string($result)){
+				if(is_string($fts->findOffspringRelationship($_POST['radioOptions1'], $_POST['radioOptions2'])))
+					$msg = 'Parent and child.';
+				else $msg = 'Shared ancestor: ' . $result;
+			} 
+			else $msg = "Shared ancestor found: first name: " . $result->firstName . ', last name: ' . $result->lastName . ', birth date: ' . $result->birthDate . ', gender: ' . $result->gender;
 		}
 		
 		$this->registry->template->msg = $msg;
