@@ -349,6 +349,27 @@ class PersonController extends BaseController
 	}
 
 	public function addNewPerson(){
+
+		$fts = new FamilyTreeService();
+
+		$msg = '';
+		if($_POST['firstName'] == ''){
+			$msg = 'First name required.';
+			$this->registry->template->msg = $msg;
+			$this->registry->template->show( 'message' );
+			return;
+		}
+		$person = $fts->createPerson($_POST['firstName'], $_POST['lastName'], $_POST['birthDate'], $_POST['gender']);
+
+		if(is_string($person)){
+			$msg = $msg . $person;
+		}
+		else{
+			$msg = $msg . 'Person creation successful.<br>';
+			$msg = $msg . 'firstName: ' . $person->firstName . ', lastName: ' . $person->lastName . ', birthDate: ' . $person->birthDate . ', gender: ' . $person->gender . '<br>';
+		}
+
+		$this->registry->template->msg = $msg;
 		$this->registry->template->title = 'Family trees';
 		$this->registry->template->show( 'message' );
 	}
