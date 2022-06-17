@@ -235,9 +235,8 @@ class FamilyTreeService
 	}
 
 	function createPartnerRelationship($id1, $id2, $married) {
-		$client = DB::getConnection();
 
-		$results = $client->run(
+		$results = $this->client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
 			'CREATE (p1)-[rel:PARTNER {married: "' . $married . '"}]->(p2)' .
 			'RETURN rel'
@@ -324,7 +323,7 @@ class FamilyTreeService
 
 	function createOffspringRelationship($id1, $id2, $adopted) {	// kreiraj :offspring za ($idRoditelja, $idDjeteta) s atributom $adopted
 
-		$results = $client->run(
+		$results = $this->client->run(
 			'MATCH (p1:Person {personID: "' . $id1 . '"}), (p2:Person {personID: "' . $id2 . '"})' .
 			'CREATE (p1)-[rel:OFFSPRING {adopted: "' . $adopted . '"}]->(p2)' .
 			'RETURN rel'

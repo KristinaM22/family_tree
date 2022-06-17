@@ -1,11 +1,11 @@
 <?php require_once __SITE_PATH . '/view/_header.php'; ?>
 
-<form>
+<form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/addNewRelationship' ?>">
     <table>
         <tr>
             <td>Type of relationship: </td>
             <td>
-                <select name="relationshipType">
+                <select id="relationshipType" name="relationshipType">
                     <option value="offspring" selected>Child</option>
                     <option value="partner">Partner</option>
                 </select>
@@ -13,26 +13,27 @@
         </tr>
         <tr>
             <td id="set"></td>
-            <td><label><input type="checkbox" name="setValue" value="1" />Set</label></td>
+            <td><input type="checkbox" id="setValue" name="setValue" value="1" /><label for="setValue">Set</label></td>
         </tr>
         <tr>
             <td>Find person: </td>
             <td>
                 First name: <input type="text" name="inputFirst" id="inputFirst" /><br>
                 Last name: <input type="text" name="inputLast" id="inputLast" /><br>
-                <button id="search">Search</button>
+                <button id="search" type="button">Search</button>
             </td>
         </tr>
     </table><br>
 
     <div id="showResults"></div><br>
     
-    <button type="submit" name="add" id="add" disabled>Add</button>
+    <button type="submit" name="add" id="add" value="<?php echo $id ?>" disabled>Add</button>
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
 <script>
 $(document).ready(function() {
-    $( "select" ).change(function () {
+    $( "#relationshipType" ).change(function () {
         var str = "";
         $( "select option:selected" ).each(function() {
             if( $( this ).val() === "offspring" )
@@ -52,10 +53,9 @@ function search(){
     if(firstName.length !== 0 || lastName.length !== 0){
         $.ajax(
         {
-            url: "/person/search",
+            url: window.location.origin + window.location.pathname + '?rt=person/searchResult',
             type: 'GET',
             contentType: 'application/json',
-            dataType: 'json',
             data:
             {
                 firstName: firstName,
@@ -63,13 +63,11 @@ function search(){
             },
             success: function( data )
 		    {
-			    //console.log( JSON.stringify( data ) );
-                console.log("ok");
+                console.log(data);
 
 			    if( typeof( data.error ) === "undefined" )
 			    {
 				    show( data );
-                    $( '#add' ).removeAttr( "disabled" );
 			    }
                 else console.log( typeof( data.error ) );
 		    },
@@ -82,20 +80,26 @@ function search(){
 		    }
         })
     }
-    else $( '#showResults' )html( 'Please input at least one name.' );
+    else $( '#showResults' ).text( 'Please input at least one name.' );
 }
 
 function show( data ){
+var results = JSON.parse(data);
+if( $.isArray(results) &&  results.length > 0 ) {
     var str = '<table>';
-    $.each( data, function( index, value ) {
-        str += '<tr><td>' + value.firstName + value.lastName + ',<br>';
+    str += '<tr><th>Osoba</th><th>Odaberi</th></tr>';
+    $.each( results, function( index, value ) {
+        str += '<tr><td>' + value.firstName + ' ' + value.lastName + ',<br>';
         str += value.gender + ', ' + value.birthDate + '</td>';
-        str += '<td><button type="radio" name="options" value=' + value.personID;
-        if( index === 0 ) str += 'checked';
-        str += ' >Odaberi</button></td></tr>'
+        str += '<td><input type="radio" name="radioOptions" value="' + value.personID + '"';
+        if( index === 0 ) str += ' checked';
+        str += ' /></td></tr>'
     });
+    $( '#add' ).removeAttr( "disabled" );
     str += '</table>';
     $( '#showResults' ).html( str );
+}
+else $( '#showResults' ).html("No result." );
 }
 </script>
 

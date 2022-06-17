@@ -47,6 +47,10 @@ class Template
 		// (Na primjer, za svakog usera pozove jedan (uvijek isti) view koji prikaže podatke o tom useru.)
 		require ($path); 
 	}
+
+	function send_json( $data ){
+		echo json_encode($data);
+	}
 }
 
 ?>

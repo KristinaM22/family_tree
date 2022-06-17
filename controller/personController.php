@@ -266,7 +266,7 @@ class PersonController extends BaseController
 	public function newRelationship($_id){
 		$id = $_id;
 		$this->registry->template->title = 'Family trees';
-		$this->registry->template->person_id = $id;
+		$this->registry->template->id = $id;
 		$this->registry->template->show( 'person_newRelationship' );
 	}
 
@@ -291,7 +291,7 @@ class PersonController extends BaseController
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['adopted'] . '<br>';
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' attribute change: ' . $result['adopted'] . '<br>';
 		}}
 
 		if(isset($_POST['delete_parents'])){
@@ -307,7 +307,7 @@ class PersonController extends BaseController
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyPartnerRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['married'] . '<br>';
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' attribute change: ' . $result['married'] . '<br>';
 		}}
 
 		if(isset($_POST['delete_partners'])){
@@ -323,7 +323,7 @@ class PersonController extends BaseController
 			$set = 'false';
 			if($value[1] === 'yes') $set = 'true';
 			$result = $fts->modifyOffspringRelationship($id, $value[0], $set);
-			$msg = $msg . 'Relationship with id=' . $value[0] . ' atribute change: ' . $result['adopted'] . '<br>';
+			$msg = $msg . 'Relationship with id=' . $value[0] . ' attribute change: ' . $result['adopted'] . '<br>';
 		}}
 
 		if(isset($_POST['delete_children'])){
@@ -339,7 +339,34 @@ class PersonController extends BaseController
 	}
 
 	public function addNewRelationship(){
+
+		$fts = new FamilyTreeService();
+
+		$msg = '';
+
+		$selectedRelationship = $_POST['relationshipType'];
+		$person_id = $_POST['radioOptions'];
+		$id = $_POST['add'];
+
+		if($selectedRelationship === 'offspring') $result = $fts->findOffspringRelationship($id, $person_id);
+		else if ($selectedRelationship === 'partner') $result = $fts->findPartnerRelationship($id, $person_id);
+
+		if(!is_string($result)){
+			$msg = 'Relationship of that type between those people already exists or error occured.';
+		}
+		else{
+			$val = 'false';
+			if(isset($_POST['setValue'])) $val = 'true';
+			if($selectedRelationship === 'offspring') $result = $fts->createOffspringRelationship($id, $person_id, $val);
+			else if ($selectedRelationship === 'partner') $result = $fts->createPartnerRelationship($id, $person_id, $val);
+			if(is_string($result)){
+				$msg = $result . ', id1=' . $id . ', id2=' . $person_id;
+			}
+			else $msg = 'Relationship created: ' . $selectedRelationship . ', with ids: ' . $id . ', ' . $person_id . ', attribute value: ' . $val;
+		}
+
 		$this->registry->template->title = 'Family trees';
+		$this->registry->template->msg = $msg;
 		$this->registry->template->show( 'message' );
 	}
 
@@ -380,7 +407,26 @@ class PersonController extends BaseController
 
 	public function search(){}
 
-	public function searchResult(){}
+	public function searchResult(){
+
+		$fts = new FamilyTreeService();
+
+		$firstName = $_GET['firstName'];
+		$lastName = $_GET['lastName'];
+
+		$result = $fts->getPersonByName($firstName, $lastName);
+		$data = array();
+		$index = 0;
+		foreach($result as $person){
+			$data[$index]['personID'] = $person->personID; 
+			$data[$index]['firstName'] = $person->firstName;
+			$data[$index]['lastName'] = $person->lastName;
+			$data[$index]['birthDate'] = $person->birthDate;
+			$data[$index]['gender'] = $person->gender;
+			$index++;
+		}
+		$this->registry->template->send_json( $data );
+	}
 }; 
 
 ?>
