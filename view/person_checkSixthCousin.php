@@ -75,7 +75,7 @@ function search(){
 function show( data, n ){
 var results = JSON.parse(data);
 if( $.isArray(results) &&  results.length > 0 ) {
-    var str = '<table>';
+    var str = '<br> <table>';
     str += '<tr><th>Osoba</th><th>Odaberi</th></tr>';
     $.each( results, function( index, value ) {
         str += '<tr><td>' + value.firstName + ' ' + value.lastName + ',<br>';
@@ -85,7 +85,7 @@ if( $.isArray(results) &&  results.length > 0 ) {
         str += ' /></td></tr>'
     });
     $( '#check' ).removeAttr( "disabled" );
-    str += '</table>';
+    str += '</table> <br>';
     $( '#showResults' + n ).html( str );
 }
 else $( '#showResults' + n ).html("No result." );

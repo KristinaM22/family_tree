@@ -82,7 +82,7 @@ if( $.isArray(results) &&  results.length > 0 ) {
         str += ' /></td></tr>'
     });
     $( '#show' ).removeAttr( "disabled" );
-    str += '</table>';
+    str += '</table> <br>';
     $( '#showResults' ).html( str );
 }
 else $( '#showResults' ).html("No result." );

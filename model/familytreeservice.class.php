@@ -88,7 +88,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person)' . 
-        	'WITH COUNT(*) + 2 AS c ' .
+        	'WITH COUNT(*) + 5 AS c ' .
         	'CREATE (p:Person {' .
 				'personID: "[I" + c + "]",' .
 				'firstName: "' . $firstName . '",' .
@@ -149,10 +149,20 @@ class FamilyTreeService
 	function findSharedAncestor($id1, $id2) {
 
 		$results = $this->client->run(
-			'MATCH path = (:Person {personID: "' . $id1 . '"})' .
+			/*'MATCH path = (:Person {personID: "' . $id1 . '"})' .
 				'<-[:OFFSPRING*..6]-(ancestor)-[:OFFSPRING*..6]->' . 
 				'(:Person {personID: "' . $id2 . '"}) ' .
 			'RETURN ancestor ' . 
+			'ORDER BY length(path) ' . 
+			'LIMIT 1'*/
+			'MATCH (c:Person {personID: "' . $id1 . '"})' .
+			'<-[:OFFSPRING*..6]-(p1: Person)' .		
+
+			'MATCH (:Person {personID: "' . $id2 . '"})' .
+			'<-[:OFFSPRING*..6]-(p2: Person) ' .	
+			'WHERE p2.personID=p1.personID ' .
+			'MATCH path=(c)<-[:OFFSPRING*..6]-(p1) ' . 
+			'RETURN p1 ' .
 			'ORDER BY length(path) ' . 
 			'LIMIT 1'
 		);
@@ -160,7 +170,7 @@ class FamilyTreeService
 		if($results->count() === 0) return "does not exist";
 		if($results->count() > 1) return "unexpected result";
 
-		$node = $results[0]->get('ancestor');
+		$node = $results[0]->get('p1');
 		return new Person(
 			$node->getProperty('personID'),
 			$node->getProperty('firstName'),

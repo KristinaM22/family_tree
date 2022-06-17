@@ -8,7 +8,7 @@
     echo '<tr><td>Gender: </td><td>' . $person->gender . '</td></tr>';
     echo '</table><br>';
 
-    echo '<table>';
+    echo '<br> <table>';
     echo '<tr><th>Relationship type</th><th>Relationship value</th><th>Person</th></tr>';
     if(!empty($parents)){
     foreach($parents as $parent){

@@ -21,7 +21,9 @@ input[type=radio]{
   overflow:hidden; 
   text-align : center;
   width: 100%;
+
 }
+
 h3 {
   text-align: center;
 }
@@ -208,7 +210,7 @@ table {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
-  height: 320px;
+  height: 50px;
   margin: auto;
   max-width: 600px;
   padding:5px;
@@ -228,6 +230,7 @@ th {
   text-align:left;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align:middle;
+  height: 50px;
 }
 
 th:first-child {
@@ -246,12 +249,15 @@ tr {
   font-size:16px;
   font-weight:normal;
   text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+  height: 50px;
+  
 }
  
 tr:hover td {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
+  height: 50px;
 }
  
 tr:first-child {
@@ -281,12 +287,14 @@ tr:last-child td:last-child {
 td {
   background:#FFFFFF;
   padding:20px;
-  text-align:left;
+  text-align:center;
   vertical-align:middle;
   font-weight:300;
   font-size:18px;
   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
   border-right: 1px solid #C1C3D1;
+  height: 50px;
+
 }
 
 td:last-child {
@@ -307,10 +315,6 @@ th.text-right {
 
 td.text-left {
   text-align: left;
-}
-
-td {
-  text-align: center;
 }
 
 td.text-right {
