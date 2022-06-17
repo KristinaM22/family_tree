@@ -1,13 +1,13 @@
 <?php require_once __SITE_PATH . '/view/_header.php'; ?>
 
-<form>
+<form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/ancestorResponse' ?>">
     <table>
         <tr>
             <td>Find first person: </td>
             <td>
                 First name: <input type="text" name="inputFirst" id="inputFirst1" /><br>
                 Last name: <input type="text" name="inputLast" id="inputLast1" /><br>
-                <button id="search1">Search</button>
+                <button type="button" id="search1">Search</button>
             </td>
         </tr>
         <tr>
@@ -15,7 +15,7 @@
             <td>
                 First name: <input type="text" name="inputFirst" id="inputFirst2" /><br>
                 Last name: <input type="text" name="inputLast" id="inputLast2" /><br>
-                <button id="search2">Search</button>
+                <button type="button" id="search2">Search</button>
             </td>
         </tr>
     </table><br>
@@ -25,6 +25,7 @@
     <button type="submit" name="check" id="check">Check</button>
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
 <script>
 $(document).ready(function() {
     $( "#search1" ).click( search );
@@ -34,25 +35,24 @@ $(document).ready(function() {
 function search(){
     var id = $(this).attr('id');
     var n = id[id.length-1];
+    console.log(n);
     var firstName = $('#inputFirst' + n).val().trim();
     var lastName = $('#inputLast' + n).val().trim();
 
     if(firstName.length !== 0 || lastName.length !== 0){
         $.ajax(
         {
-            url: "/person/search",
+            url: window.location.origin + window.location.pathname + '?rt=person/searchResult',
             type: 'GET',
             contentType: 'application/json',
-            dataType: 'json',
             data:
             {
-                firstName: firstName,
-                lastName: lastName
+                firstNameSearch: firstName,
+                lastNameSearch: lastName
             },
             success: function( data )
 		    {
-			    //console.log( JSON.stringify( data ) );
-                console.log("ok");
+                console.log(data);
 
 			    if( typeof( data.error ) === "undefined" )
 			    {
@@ -69,20 +69,26 @@ function search(){
 		    }
         })
     }
-    else $( '#showResults' + n )html( 'Please input at least one name.' );
+    else $( '#showResults' + n ).text( 'Please input at least one name.' );
 }
 
 function show( data, n ){
+var results = JSON.parse(data);
+if( $.isArray(results) &&  results.length > 0 ) {
     var str = '<table>';
-    $.each( data, function( index, value ) {
-        str += '<tr><td>' + value.firstName + value.lastName + ',<br>';
+    str += '<tr><th>Osoba</th><th>Odaberi</th></tr>';
+    $.each( results, function( index, value ) {
+        str += '<tr><td>' + value.firstName + ' ' + value.lastName + ',<br>';
         str += value.gender + ', ' + value.birthDate + '</td>';
-        str += '<td><button type="radio" name="options' + n + '" value=' + value.personID;
-        if( index === 0 ) str += 'checked';
-        str += ' >Odaberi</button></td></tr>'
+        str += '<td><input type="radio" name="radioOptions' + n + '" value="' + value.personID + '"';
+        if( index === 0 ) str += ' checked';
+        str += ' /></td></tr>'
     });
+    $( '#check' ).removeAttr( "disabled" );
     str += '</table>';
     $( '#showResults' + n ).html( str );
+}
+else $( '#showResults' + n ).html("No result." );
 }
 </script>
 

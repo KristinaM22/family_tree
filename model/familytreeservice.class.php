@@ -151,9 +151,9 @@ class FamilyTreeService
 		$results = $this->client->run(
 			'MATCH path = (:Person {personID: "' . $id1 . '"})' .
 				'<-[:OFFSPRING*..6]-(ancestor)-[:OFFSPRING*..6]->' . 
-				'(:Person {personID: "' . $id2 . '"})' .
-			'RETURN ancestor' . 
-			'ORDER BY length(path)' . 
+				'(:Person {personID: "' . $id2 . '"}) ' .
+			'RETURN ancestor ' . 
+			'ORDER BY length(path) ' . 
 			'LIMIT 1'
 		);
 

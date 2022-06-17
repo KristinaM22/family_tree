@@ -1,24 +1,31 @@
 <?php require_once __SITE_PATH . '/view/_header.php'; ?>
 
-<form>
+<form method="post" action="<?php echo __SITE_URL . '/familytree.php?rt=person/show' ?>">
     <table>
         <tr>
             <td>Find person: </td>
             <td>
                 First name: <input type="text" name="inputFirst" id="inputFirst" /><br>
                 Last name: <input type="text" name="inputLast" id="inputLast" /><br>
-                <button id="search">Search</button>
+                <button type="button" id="search">Search</button>
             </td>
         </tr>
     </table><br>
 
     <div id="showResults"></div><br>
     
-    <button type="submit" name="showPerson" id="show" disabled>Show</button>
+    <button type="submit" name="selected" id="show" disabled>Show</button>
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
 <script>
 $(document).ready(function() {
+
+    $(document).on("click", "input[name=radioOptions]:radio", function(){
+        var id = $("input:radio[name=radioOptions]:checked").val();
+        $( '#show' ).val(id);
+    });
+
     $( "#search" ).click( search );
 });
 
@@ -29,24 +36,21 @@ function search(){
     if(firstName.length !== 0 || lastName.length !== 0){
         $.ajax(
         {
-            url: "/person/search",
+            url: window.location.origin + window.location.pathname + '?rt=person/searchResult',
             type: 'GET',
             contentType: 'application/json',
-            dataType: 'json',
             data:
             {
-                firstName: firstName,
-                lastName: lastName
+                firstNameSearch: firstName,
+                lastNameSearch: lastName
             },
             success: function( data )
 		    {
-			    //console.log( JSON.stringify( data ) );
-                console.log("ok");
+                console.log(data);
 
 			    if( typeof( data.error ) === "undefined" )
 			    {
 				    show( data );
-                    $( '#show' ).removeAttr( "disabled" );
 			    }
                 else console.log( typeof( data.error ) );
 		    },
@@ -59,20 +63,29 @@ function search(){
 		    }
         })
     }
-    else $( '#showResults' )html( 'Please input at least one name.' );
+    else $( '#showResults' ).text( 'Please input at least one name.' );
 }
 
 function show( data ){
+var results = JSON.parse(data);
+if( $.isArray(results) &&  results.length > 0 ) {
     var str = '<table>';
-    $.each( data, function( index, value ) {
-        str += '<tr><td>' + value.firstName + value.lastName + ',<br>';
+    str += '<tr><th>Osoba</th><th>Odaberi</th></tr>';
+    $.each( results, function( index, value ) {
+        str += '<tr><td>' + value.firstName + ' ' + value.lastName + ',<br>';
         str += value.gender + ', ' + value.birthDate + '</td>';
-        str += '<td><button type="radio" name="options" value=' + value.personID;
-        if( index === 0 ) str += 'checked';
-        str += ' >Odaberi</button></td></tr>'
+        str += '<td><input type="radio" name="radioOptions" value="' + value.personID + '"';
+        if( index === 0 ){
+            str += ' checked';
+            $( '#show' ).val(value.personID);
+        }
+        str += ' /></td></tr>'
     });
+    $( '#show' ).removeAttr( "disabled" );
     str += '</table>';
     $( '#showResults' ).html( str );
+}
+else $( '#showResults' ).html("No result." );
 }
 </script>
 

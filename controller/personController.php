@@ -1,16 +1,5 @@
 <?php 
 
-/*function getAllPersons() // vraca array ljudi
-function getPersonByID($id) // vraca jednu osobu
-function getPersonByName($name, $surname) // vraca array ljudi
-function createPerson($firstName, $lastName, $birthDate, $gender) // vraca jednu osobu
-function deletePerson($id) // ne vraca nista
-function modifyPerson($personID, $firstName, $lastName, $birthDate, $gender) // vraca 1 osobu
-function findSharedAncestor($id1, $id2) // vraca 1 osobu
-function findPartners($id) // vraca array ljudi (sve s kojima je $id bio u braku)
-function findPartnerRelationships($id1, $id2) // vraca 1 relationship - ne znam hoce li ovo bit potrebno al nek stoji
-function modifyPartnerRelationship($id1, $id2, $married) // vraca 1 relationship, $married  je string true ili false*/
-
 class PersonController extends BaseController
 {
 	public function index() 
@@ -153,8 +142,8 @@ class PersonController extends BaseController
 
 		$fts = new FamilyTreeService();
 
+		$this->registry->template->title = 'Family trees';
 		$this->registry->template->msg = $fts->deletePerson($id);
-
 		$this->registry->template->show( 'message' );
 	}
 
@@ -401,18 +390,41 @@ class PersonController extends BaseController
 		$this->registry->template->show( 'message' );
 	}
 
-	public function findAncestor(){}
+	public function findAncestor(){
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'person_checkSixthCousin' );
+	}
 
-	public function ancestorResponse(){}
+	public function ancestorResponse(){
 
-	public function search(){}
+		$fts = new FamilyTreeService();
+		$msg = '';
+
+		if(!isset($_POST['radioOptions1']) || !isset($_POST['radioOptions2'])){
+			$msg = 'Input error';
+		}
+		else{
+			$result = $fts->findSharedAncestor($_POST['radioOptions1'], $_POST['radioOptions2']);
+			if(is_string($result)) $msg = 'Common ancestor response: ' . $result;
+			else $msg = "Common ancestor found: first name: " . $result->firstName . ', last name: ' . $result->lastName . ', birth date: ' . $result->birthDate . ', gender: ' . $result->gender;
+		}
+		
+		$this->registry->template->msg = $msg;
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'message' );
+	}
+
+	public function search(){
+		$this->registry->template->title = 'Family trees';
+		$this->registry->template->show( 'person_search' );
+	}
 
 	public function searchResult(){
 
 		$fts = new FamilyTreeService();
 
-		$firstName = $_GET['firstName'];
-		$lastName = $_GET['lastName'];
+		$firstName = $_GET['firstNameSearch'];
+		$lastName = $_GET['lastNameSearch'];
 
 		$result = $fts->getPersonByName($firstName, $lastName);
 		$data = array();

@@ -58,8 +58,8 @@ function search(){
             contentType: 'application/json',
             data:
             {
-                firstName: firstName,
-                lastName: lastName
+                firstNameSearch: firstName,
+                lastNameSearch: lastName
             },
             success: function( data )
 		    {
