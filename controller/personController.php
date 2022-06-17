@@ -143,7 +143,7 @@ class PersonController extends BaseController
 		$fts = new FamilyTreeService();
 
 		$this->registry->template->title = 'Family trees';
-		$this->registry->template->msg = $fts->deletePerson($id);
+		$this->registry->template->msg = $fts->deletePerson($_id);
 		$this->registry->template->show( 'message' );
 	}
 
@@ -406,7 +406,7 @@ class PersonController extends BaseController
 		else{
 			$result = $fts->findSharedAncestor($_POST['radioOptions1'], $_POST['radioOptions2']);
 			if(is_string($result)){
-				if(is_string($fts->findOffspringRelationship($_POST['radioOptions1'], $_POST['radioOptions2'])))
+				if(!is_string($fts->findOffspringRelationship($_POST['radioOptions1'], $_POST['radioOptions2'])))
 					$msg = 'Parent and child.';
 				else $msg = 'Shared ancestor: ' . $result;
 			} 
