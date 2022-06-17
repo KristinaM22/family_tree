@@ -85,16 +85,20 @@ class FamilyTreeService
 	}
 
 	function createPerson($firstName, $lastName, $birthDate, $gender) {
-
+		// kreiramo osobu i želimo joj dati novi jedinstveni ID
+		// ID-jevi su došli iz dataseta i želimo zadržati taj format
+		// ali budući da moraju biti jedinstveni, tražimo način da izračunamo broj koji će biti ok
+		// primjerice, broj čvorova u bazi * 2 je dovoljno dobro za trenutne potrebe baze
+		// ovo bi se naravno dalo popraviti kad bismo aplikaciju detaljnije razvijali
 		$results = $this->client->run(
-			'MATCH (:Person)' . 
-        	'WITH COUNT(*) + 5 AS c ' .
+			'MATCH (:Person) ' . 
+        	'WITH COUNT(*) * 2 AS new ' .
         	'CREATE (p:Person {' .
-				'personID: "[I" + c + "]",' .
-				'firstName: "' . $firstName . '",' .
-				'lastName: "' . $lastName . '",' .
-				'birthDate: "' . $birthDate . '",' .
-				'gender: "' . $gender . '"})' .
+				'personID: "[I" + new + "]", ' .
+				'firstName: "' . $firstName . '", ' .
+				'lastName: "' . $lastName . '", ' .
+				'birthDate: "' . $birthDate . '", ' .
+				'gender: "' . $gender . '"}) ' .
 			'RETURN p'
 		);
 
@@ -149,18 +153,11 @@ class FamilyTreeService
 	function findSharedAncestor($id1, $id2) {
 
 		$results = $this->client->run(
-			/*'MATCH path = (:Person {personID: "' . $id1 . '"})' .
-				'<-[:OFFSPRING*..6]-(ancestor)-[:OFFSPRING*..6]->' . 
-				'(:Person {personID: "' . $id2 . '"}) ' .
-			'RETURN ancestor ' . 
-			'ORDER BY length(path) ' . 
-			'LIMIT 1'*/
 			'MATCH (c:Person {personID: "' . $id1 . '"})' .
-			'<-[:OFFSPRING*..6]-(p1: Person)' .		
-
+					'<-[:OFFSPRING*..6]-(p1: Person)' .		
 			'MATCH (:Person {personID: "' . $id2 . '"})' .
-			'<-[:OFFSPRING*..6]-(p2: Person) ' .	
-			'WHERE p2.personID=p1.personID ' .
+					'<-[:OFFSPRING*..6]-(p2: Person) ' .	
+				'WHERE p2.personID=p1.personID ' .
 			'MATCH path=(c)<-[:OFFSPRING*..6]-(p1) ' . 
 			'RETURN p1 ' .
 			'ORDER BY length(path) ' . 
