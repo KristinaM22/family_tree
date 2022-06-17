@@ -11,7 +11,20 @@ input[type=checkbox]{
         text-align : center;
         width: 100%;
 }
-
+input[type=radio]{
+  margin:0 ;
+  padding:0;
+  border: 1px solid black;  
+  display:block;
+  height:20px;
+  width:20px;
+  overflow:hidden; 
+  text-align : center;
+  width: 100%;
+}
+h3 {
+  text-align: center;
+}
 /*nav*/
 nav {
 width: 100%;
@@ -169,6 +182,7 @@ body {
   font-size: 16px;
   font-weight: 400;
   text-rendering: optimizeLegibility;
+  text-align: center;
 }
 
 div.table-title {
@@ -187,6 +201,7 @@ div.table-title {
    font-family: "Roboto", helvetica, arial, sans-serif;
    text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
    text-transform:uppercase;
+
 }
 
 table {
@@ -329,7 +344,8 @@ button {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: 100%;
+  width: 50 px;
+  text-align: center;
 }
 
 button:disabled {
