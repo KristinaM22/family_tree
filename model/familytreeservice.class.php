@@ -88,7 +88,7 @@ class FamilyTreeService
 
 		$results = $this->client->run(
 			'MATCH (:Person)' . 
-        	'WITH COUNT(*) + 1 AS c ' .
+        	'WITH COUNT(*) + 2 AS c ' .
         	'CREATE (p:Person {' .
 				'personID: "[I" + c + "]",' .
 				'firstName: "' . $firstName . '",' .
