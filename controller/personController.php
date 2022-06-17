@@ -406,7 +406,7 @@ class PersonController extends BaseController
 		else{
 			$result = $fts->findSharedAncestor($_POST['radioOptions1'], $_POST['radioOptions2']);
 			if(is_string($result)){
-				if(is_string($fts->findOffspringRelationship($_POST['radioOptions1'], $_POST['radioOptions2'])))
+				if(!is_string($fts->findOffspringRelationship($_POST['radioOptions1'], $_POST['radioOptions2'])))
 					$msg = 'Parent and child.';
 				else $msg = 'Shared ancestor: ' . $result;
 			} 
