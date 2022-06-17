@@ -143,7 +143,7 @@ class PersonController extends BaseController
 		$fts = new FamilyTreeService();
 
 		$this->registry->template->title = 'Family trees';
-		$this->registry->template->msg = $fts->deletePerson($id);
+		$this->registry->template->msg = $fts->deletePerson($_id);
 		$this->registry->template->show( 'message' );
 	}
 

@@ -114,7 +114,7 @@ class FamilyTreeService
 	function deletePerson($id) {
 
 		$results = $this->client->run(
-			'MATCH (p:Person {personID: "' . $id . '"})' .
+			'MATCH (p:Person {personID: "' . $id . '"}) ' .
 			'DETACH DELETE p'
 		);
 
